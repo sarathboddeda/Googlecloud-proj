@@ -1,6 +1,6 @@
 options:
   machineType: 'N1_HIGHCPU_8'
-  service_account: 'my-build-service-account@my-project-id.iam.gserviceaccount.com'
+  service_account: 'sarath-research-py@appspot.gserviceaccount.com'
   logsBucket: 'gs://my-build-logs-bucket'
 
 steps:
