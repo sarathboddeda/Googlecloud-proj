@@ -1,18 +1,7 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/sarath-research-py/my-image', '.']
-   
-  'gcloud services enable cloudbuild.googleapis.com'
- 
-#Push the image
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/my-image', '.']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/sarath-research-py/my-image']
-
-# deploy container image to GKE
-- name: "gcr.io/cloud-builders/gke-deploy"
-  args:
-  - run
-  - --filename=K8s_configs/
-  - --image=gcr.io/sarath-research-py/my-image
-  - --location=us-central1
-  - --cluster=sarathpythongoogle
+  args: ['push', 'gcr.io/$PROJECT_ID/my-image']
+images:
+- 'gcr.io/$PROJECT_ID/my-image'
