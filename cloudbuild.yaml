@@ -1,8 +1,11 @@
 steps:
-#Build the image
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/sarath-research-py/myapp:v1', '.']
-  timeout: 180s
+- name: gcr.io/cloud-builders/docker
+  args: ['build', '-t', 'gcr.io/sarath-research-py/my-image', '.']
+  id: build_image
+  logging:
+    gcsLogs:
+      logName: cloud-builders-docker
+      bucket: my-logs-bucket
 
 #Push the image
 - name: 'gcr.io/cloud-builders/docker'
