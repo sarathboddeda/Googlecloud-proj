@@ -1,6 +1,18 @@
 steps:
+#Build the image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '--tag=gcr.io/$PROJECT_ID/notejam-flask:$TAG_NAME', '.']
+  args: ['build', '-t', 'gcr.io/sarath-research-py/myapp:v1', '.']
+  timeout: 180s
+
+#Push the image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['run', 'gcr.io/$PROJECT_ID/notejam-flask:$TAG_NAME', 'python', '/usr/src/app/tests.py']
-images: ['gcr.io/$PROJECT_ID/notejam-flask:$TAG_NAME']
+  args: ['push', 'gcr.io/sarath-research-py/myapp:v1']
+
+# deploy container image to GKE
+- name: "gcr.io/cloud-builders/gke-deploy"
+  args:
+  - run
+  - --filename=K8s_configs/
+  - --image=gcr.io/sarath-research-py/myapp:v1
+  - --location=us-central1
+  - --cluster=sarathpythongoogle
