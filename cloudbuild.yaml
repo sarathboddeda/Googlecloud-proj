@@ -1,7 +1,8 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/sarath-research-py/my-image', '.']
-  id: build_image
+   
+  gcloud services enable cloudbuild.googleapis.com
  
 #Push the image
 - name: 'gcr.io/cloud-builders/docker'
