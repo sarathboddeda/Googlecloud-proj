@@ -17,4 +17,4 @@ EXPOSE 8000
 ENV NAME World
 
 # Run app.py when the container launches
-CMD ["python", "manage.py", "makemigrations" , "migrate", "runserver", "35.232.247.42"]
+CMD ["python", "manage.py", "makemigrations" , "migrate", "runserver"]
