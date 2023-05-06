@@ -1,7 +1,7 @@
 steps:
 - name: 'gcr.io/cloud-builders/go'
   args: ['install', '.']
-logsBucket: 'gs://mybucket'
+logsBucket: 'gs://sarathgcpbucket'
 steps:
   # Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
