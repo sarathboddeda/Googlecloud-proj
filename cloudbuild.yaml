@@ -4,7 +4,7 @@ steps:
 logsBucket: 'gs://sarathgcpbucket'
 steps:
   # Build the Docker image
-  - name: 'gcr.io/cloud-builders/docker'
+  - name: 'gcr.io/cloud-builders/docker@sha256:6bda669f137d58d2407f46bd533ed4f35e99d482f4160246fb76dac0e96f5b9f'
     args: ['build', '-t', 'gcr.io/$PROJECT_ID/my-django-app:$COMMIT_SHA', '.']
   # Push the Docker image to Google Container Registry
   - name: 'gcr.io/cloud-builders/docker'
