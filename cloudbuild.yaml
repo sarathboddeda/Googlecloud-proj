@@ -10,10 +10,9 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/sarath-research-py/my-django-app:$COMMIT_SHA']
   # Deploy the Docker image to Google Kubernetes Engine
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['deploy', 'gcr.io/sarath-research-py/my-django-app:$COMMIT_SHA']
-    # - 'set'
-    # - 'image'
-    #  - 'deployment/my-django-app'
-    #  - 'my-django-app=gcr.io/sarath-research-py/my-django-app:$COMMIT_SHA'
-
+  - name: gcr.io/cloud-builders/kubectl
+  args: ['apply', '-f', 'deployment.yaml']
+  env:
+  - 'CLOUDSDK_COMPUTE_REGION=us-central1'
+  - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=sarathpythongoogle'
