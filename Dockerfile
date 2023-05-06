@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.9-slim
+FROM python:3.6
 
 # Set the working directory to /app
 WORKDIR /app
@@ -12,10 +12,3 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 RUN python manage.py makemigrations
 RUN python manage.py migrate
 RUN python manage.py runserver
-
-# Make port 8000 available to the world outside this container
-EXPOSE 8000
-
-# Define environment variable
-ENV NAME World
-
