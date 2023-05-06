@@ -1,11 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    autopilot.gke.io/resource-adjustment: >-
-      {"input":{"containers":[{"name":"my-django-app-sha256-1"}]},"output":{"containers":[{"limits":{"cpu":"500m","ephemeral-storage":"1Gi","memory":"2Gi"},"requests":{"cpu":"500m","ephemeral-storage":"1Gi","memory":"2Gi"},"name":"my-django-app-sha256-1"}]},"modified":true}
   labels:
-    app: sarath-deploy-gcp
+    app: sarathresearchdeploygcp
   managedFields:
     - apiVersion: apps/v1
       fieldsType: FieldsV1
@@ -47,12 +44,13 @@ metadata:
               'f:terminationGracePeriodSeconds': {}
       manager: GoogleCloudConsole
       operation: Update
-      time: '2023-05-06T18:45:57Z'
+      time: '2023-05-06T19:55:17Z'
     - apiVersion: apps/v1
       fieldsType: FieldsV1
       fieldsV1:
         'f:metadata':
           'f:annotations':
+            .: {}
             'f:deployment.kubernetes.io/revision': {}
         'f:status':
           'f:availableReplicas': {}
@@ -77,19 +75,18 @@ metadata:
           'f:observedGeneration': {}
           'f:readyReplicas': {}
           'f:replicas': {}
-          'f:unavailableReplicas': {}
           'f:updatedReplicas': {}
       manager: kube-controller-manager
       operation: Update
       subresource: status
-      time: '2023-05-06T18:54:27Z'
-  name: sarath-deploy-gcp
+      time: '2023-05-06T19:55:30Z'
+  name: sarathresearchdeploygcp
   namespace: default
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: sarath-deploy-gcp
+      app: sarathresearchdeploygcp
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -98,39 +95,18 @@ spec:
   template:
     metadata:
       labels:
-        app: sarath-deploy-gcp
+        app: sarathresearchdeploygcp
     spec:
       containers:
         - image: gcr.io/sarath-research-py/github_sarathboddeda_googlecloud-proj
           imagePullPolicy: IfNotPresent
           name: my-django-app-sha256-1
-          resources:
-            limits:
-              cpu: 500m
-              ephemeral-storage: 1Gi
-              memory: 2Gi
-            requests:
-              cpu: 500m
-              ephemeral-storage: 1Gi
-              memory: 2Gi
-          securityContext:
-            capabilities:
-              drop:
-                - NET_RAW
-      securityContext:
-        seccompProfile:
-          type: RuntimeDefault
-      tolerations:
-        - effect: NoSchedule
-          key: kubernetes.io/arch
-          operator: Equal
-          value: amd64
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   labels:
-    app: sarath-deploy-gcp
+    app: sarathresearchdeploygcp
   managedFields:
     - apiVersion: autoscaling/v2
       fieldsType: FieldsV1
@@ -149,7 +125,7 @@ metadata:
             'f:name': {}
       manager: GoogleCloudConsole
       operation: Update
-      time: '2023-05-06T18:45:58Z'
+      time: '2023-05-06T19:55:17Z'
     - apiVersion: autoscaling/v2
       fieldsType: FieldsV1
       fieldsV1:
@@ -183,8 +159,8 @@ metadata:
       manager: vpa-recommender
       operation: Update
       subresource: status
-      time: '2023-05-06T18:46:14Z'
-  name: sarath-deploy-gcp-hpa-ivym
+      time: '2023-05-06T19:55:36Z'
+  name: sarathresearchdeploygcp-hpa-gwnd
   namespace: default
 spec:
   maxReplicas: 5
@@ -199,15 +175,17 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: sarath-deploy-gcp
+    name: sarathresearchdeploygcp
 ---
 apiVersion: v1
 kind: Service
 metadata:
   annotations:
     cloud.google.com/neg: '{"ingress":true}'
+  finalizers:
+    - service.kubernetes.io/load-balancer-cleanup
   labels:
-    app: sarath-deploy-gcp
+    app: sarathresearchdeploygcp
   managedFields:
     - apiVersion: v1
       fieldsType: FieldsV1
@@ -217,6 +195,8 @@ metadata:
             .: {}
             'f:app': {}
         'f:spec':
+          'f:allocateLoadBalancerNodePorts': {}
+          'f:externalTrafficPolicy': {}
           'f:internalTrafficPolicy': {}
           'f:ports':
             .: {}
@@ -230,22 +210,39 @@ metadata:
           'f:type': {}
       manager: GoogleCloudConsole
       operation: Update
-      time: '2023-05-06T18:47:43Z'
-  name: sarath-deploy-gcp-service
+      time: '2023-05-06T19:55:35Z'
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:finalizers':
+            .: {}
+            'v:"service.kubernetes.io/load-balancer-cleanup"': {}
+        'f:status':
+          'f:loadBalancer':
+            'f:ingress': {}
+      manager: kube-controller-manager
+      operation: Update
+      subresource: status
+      time: '2023-05-06T19:56:13Z'
+  name: sarathresearchdeploygcp-service
   namespace: default
 spec:
-  clusterIP: 10.13.0.227
+  allocateLoadBalancerNodePorts: true
+  clusterIP: 10.116.9.53
   clusterIPs:
-    - 10.13.0.227
+    - 10.116.9.53
+  externalTrafficPolicy: Cluster
   internalTrafficPolicy: Cluster
   ipFamilies:
     - IPv4
   ipFamilyPolicy: SingleStack
   ports:
-    - port: 80
+    - nodePort: 32330
+      port: 80
       protocol: TCP
       targetPort: 80
   selector:
-    app: sarath-deploy-gcp
+    app: sarathresearchdeploygcp
   sessionAffinity: None
-  type: ClusterIP
+  type: LoadBalancer
