@@ -1,12 +1,14 @@
-options:
-  machineType: 'N1_HIGHCPU_8'
-  service_account: '957014213241-compute@developer.gserviceaccount.com'
-  logsBucket: 'gs://my-build-logs-bucket'
-
 steps:
-  - name: 'gcr.io/cloud-builders/python'
-    args: ['pip', 'install', '-r', 'requirements.txt']
-  - name: 'gcr.io/cloud-builders/python'
-    args: ['python', 'manage.py', 'test']
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['app', 'deploy']
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/my-django-app:$COMMIT_SHA', '.']
+  # Push the Docker image to Google Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/my-django-app:$COMMIT_SHA']
+  # Deploy the Docker image to Google Kubernetes Engine
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args:
+      - 'set'
+      - 'image'
+      - 'deployment/my-django-app'
+      - 'my-django-app=gcr.io/$PROJECT_ID/my-django-app:$COMMIT_SHA'
