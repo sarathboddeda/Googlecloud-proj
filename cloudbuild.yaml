@@ -5,14 +5,14 @@ logsBucket: 'gs://sarathgcpbucket'
 steps:
   # Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/my-django-app:$COMMIT_SHA', '.']
+    args: ['build', '-t', 'gcr.io/sarath-research-py/my-django-app:$COMMIT_SHA', '.']
   # Push the Docker image to Google Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/my-django-app:$COMMIT_SHA']
+    args: ['push', 'gcr.io/sarath-research-py/my-django-app:$COMMIT_SHA']
   # Deploy the Docker image to Google Kubernetes Engine
   - name: 'gcr.io/cloud-builders/kubectl'
     args:
       - 'set'
       - 'image'
       - 'deployment/my-django-app'
-      - 'my-django-app=gcr.io/$PROJECT_ID/my-django-app:$COMMIT_SHA'
+      - 'my-django-app=gcr.io/sarath-research-py/my-django-app:$COMMIT_SHA'
