@@ -25,10 +25,7 @@ SECRET_KEY = 'hatz2tx)qw4-*9iep$s@568d0isccy-o(%pjw585xilrtx%0*j'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    'github-sarathboddeda-googlecloud-proj-pqbw7y3rxq-uc.a.run.app',
-    # add any other hostnames or IP addresses that should be allowed
-]
+ALLOWED_HOSTS = ["*"]
 
 
 
